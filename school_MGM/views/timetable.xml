@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_school_timetable_search">
+        <field name="name">school.timetable.search</field>
+        <field name="model">school.timetable</field>
+        <field name="arch" type="xml">
+            <search string="Timetable">
+                <field name="reference"/>
+                <field name="teacher_id"/>
+                <field name="group_id"/>
+                <field name="subject_id"/>
+                <filter name="morning" string="Morning"
+                        domain="[('period', '=', 'M')]"/>
+                <filter name="afternoon" string="Afternoon"
+                        domain="[('period', '=', 'A')]"/>
+                <filter name="evening" string="Evening"
+                        domain="[('period', '=', 'E')]"/>
+
+                <separator/>
+                <filter name="confirmed" string="Confirmed"
+                        domain="[('state', '=', 'confirmed')]"/>
+                <filter name="draft" string="Draft"
+                        domain="[('state', '=', 'draft')]"/>
+
+                <group expand="0" string="Group By">
+                    <filter name="group_by_period" string="Period"
+                            context="{'group_by': 'period'}"/>
+                    <filter name="group_by_teacher" string="Teacher"
+                            context="{'group_by': 'teacher_id'}"/>
+                    <filter name="group_by_group" string="Group"
+                            context="{'group_by': 'group_id'}"/>
+                    <filter name="group_by_state" string="Status"
+                            context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_timetable_kanban">
+        <field name="name">school.timetable.kanban</field>
+        <field name="model">school.timetable</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="group_id">
+                <!--                <field name="reference"/>-->
+                <!--                <field name="time_start"/>-->
+                <!--                <field name="time_end"/>-->
+                <!--                <field name="group_id"/>-->
+                <!--                <field name="subject_id"/>-->
+                <!--                <field name="teacher_id"/>-->
+                <!--                <field name="room_id"/>-->
+                <!--                <field name="period"/>-->
+                <!--                <field name="state"/>-->
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click p-3">
+                            <div class="o_kanban_record_top mb-2 justify-content-between">
+                                <strong class="o_kanban_record_title">
+                                    <field name="reference"/>
+                                </strong>
+                                <field name="state" widget="badge"
+                                       decoration-info="state == 'draft'"
+                                       decoration-success="state == 'confirmed'"
+                                       decoration-danger="state == 'cancelled'"/>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div class="mb-1">
+                                    <i class="fa fa-clock-o me-1 text-muted"
+                                       aria-hidden="true"/>
+                                    <span class="text-muted">Time: </span>
+                                    <field name="time_start" widget="datetime"/>
+                                    –
+                                    <field name="time_end" widget="datetime"/>
+                                </div>
+                                <div class="mb-1">
+                                    <i class="fa fa-users me-1 text-muted"
+                                       aria-hidden="true"/>
+                                    <span class="text-muted">Group: </span>
+                                    <field name="group_id"/>
+                                </div>
+                                <div class="mb-1">
+                                    <i class="fa fa-book me-1 text-muted"
+                                       aria-hidden="true"/>
+                                    <span class="text-muted">Subject: </span>
+                                    <field name="subject_id"/>
+                                </div>
+
+                                <div>
+                                    <i class="fa fa-user me-1 text-muted"
+                                       aria-hidden="true"/>
+                                    <span class="text-muted">Teacher: </span>
+                                    <field name="teacher_id"/>
+                                </div>
+                                <div class="mb-1">
+                                    <i class="fa fa-building-o me-1 text-muted"
+                                       aria-hidden="true"/>
+                                    <span class="text-muted">Room: </span>
+                                    <field name="room_id"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="view_timetable_tree" model="ir.ui.view">
+        <field name="name">school.timetable.tree</field>
+        <field name="model">school.timetable</field>
+        <field name="arch" type="xml">
+            <tree string="Timetable">
+                <field name="reference"/>
+                <field name="time_start"/>
+                <field name="time_end"/>
+                <field name="group_id"/>
+                <field name="subject_id"/>
+                <field name="teacher_id"/>
+                <field name="room_id"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'confirmed'"
+                       decoration-danger="state == 'cancelled'"/>
+            </tree>
+        </field>
+    </record>
+    <!-- Form view -->
+    <record id="view_timetable_form" model="ir.ui.view">
+        <field name="name">school.timetable.form</field>
+        <field name="model">school.timetable</field>
+        <field name="arch" type="xml">
+            <form string="Timetable">
+                <header>
+                    <button name="action_confirm" string="Confirm"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_cancel" string="Cancel"
+                            type="object"
+                            invisible="state == 'cancelled'"/>
+                    <button name="action_reset_draft" string="Reset to Draft"
+                            type="object"
+                            invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,cancelled"/>
+                </header>
+                <sheet>
+                    <group string="Schedule Info">
+                        <group>
+                            <field name="reference" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="time_start"/>
+                            <field name="time_end"/>
+                        </group>
+                    </group>
+                    <group string="Assignment">
+                        <field name="teacher_id"/>
+                        <field name="group_id"
+                               domain="[('teacher_ids', 'in', [teacher_id])]"
+                               readonly="not teacher_id"/>
+                        <field name="subject_id"
+                               domain="[('teacher_ids', 'in', [teacher_id])]"
+                               readonly="not teacher_id"/>
+                        <field name="room_id" string="Room"
+                        />
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"
+                               placeholder="Any additional notes..."/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_timetable_calendar" model="ir.ui.view">
+        <field name="name">school.timetable.calendar</field>
+        <field name="model">school.timetable</field>
+        <field name="arch" type="xml">
+            <calendar string="Timetable"
+                      date_start="time_start"
+                      date_stop="time_end"
+                      color="group_id"
+                      mode="week"
+                      quick_create="false"
+                      event_open_popup="true">
+
+                <field name="subject_id" filters="1"/>
+                <field name="group_id" filters="1"/>
+                <field name="teacher_id" filters="1"/>
+            </calendar>
+        </field>
+    </record>
+    <record id="action_school_timetable" model="ir.actions.act_window">
+        <field name="name">Timetable</field>
+        <field name="res_model">school.timetable</field>
+        <field name="search_view_id" ref="view_school_timetable_search"/>
+        <field name="view_mode">calendar,kanban,tree,form</field>
+        <field name="context">{}</field>
+        <field name="domain">[]</field>
+        <field name="view_ids" eval="[
+            Command.clear(),
+            (0, 0, {'view_mode': 'calendar', 'view_id': ref('view_timetable_calendar')}),
+            (0, 0, {'view_mode': 'kanban',   'view_id': ref('view_timetable_kanban')}),
+            (0, 0, {'view_mode': 'tree',     'view_id': ref('view_timetable_tree')}),
+            (0, 0, {'view_mode': 'form',     'view_id': ref('view_timetable_form')})
+        ]"/>
+    </record>
+
+</odoo>

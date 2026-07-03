@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="0">
+        <record id="email_template_student_enrolled" model="mail.template">
+            <field name="name">Student Enrollment Confirmation</field>
+            <field name="model_id" ref="school_MGM.model_school_student"/>
+            <field name="subject">Enrollment Confirmation - {{ object.student_code }}</field>
+            <field name="email_to">{{ object.email }}</field>
+
+            <field name="body_html" type="html">
+                <div style="font-family:Arial,Helvetica,sans-serif;
+                    max-width:650px;
+                    margin:auto;
+                    border:1px solid #ddd;
+                    border-radius:8px;
+                    overflow:hidden;">
+
+                    <div style="background:#1976D2;
+                        color:white;
+                        padding:18px;
+                        text-align:center;">
+                        <h2 style="margin:0;">School Management System</h2>
+                        <p style="margin:5px 0 0 0;">
+                            Student Enrollment Confirmation
+                        </p>
+                    </div>
+
+                    <div style="padding:25px;">
+
+                        <p>Dear <strong><t t-out="object.name"/></strong>,</p>
+
+                        <p>
+                            Congratulations! Your registration has been
+                            successfully confirmed.
+                        </p>
+
+                        <table style="width:100%;
+                              border-collapse:collapse;
+                              margin-top:20px;">
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <strong>Student Code</strong>
+                                </td>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <t t-out="object.student_code"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <strong>Name</strong>
+                                </td>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <t t-out="object.name"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <strong>Email</strong>
+                                </td>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <t t-out="object.email"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <strong>Phone</strong>
+                                </td>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <t t-out="object.phone"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <strong>Gender</strong>
+                                </td>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <t t-out="dict(object._fields['gender'].selection).get(object.gender)"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <strong>Major</strong>
+                                </td>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <t t-out="object.major_id.name"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <strong>Group</strong>
+                                </td>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <t t-out="object.group_id.name"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <strong>Academic Year</strong>
+                                </td>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <t t-out="object.academic_year_id.name"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <strong>Semester</strong>
+                                </td>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <t t-out="object.semester_id.name"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <strong>Program Year</strong>
+                                </td>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <t t-out="object.program_year_id.label"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <strong>Status</strong>
+                                </td>
+                                <td style="padding:8px;border:1px solid #ddd;color:green;">
+                                    <strong>
+                                        <t t-out="dict(object._fields['status'].selection).get(object.status)"/>
+                                    </strong>
+                                </td>
+                            </tr>
+
+                        </table>
+
+                        <p style="margin-top:25px;">
+                            We look forward to seeing you in class.
+                        </p>
+
+                        <p>
+                            Best Regards,<br/>
+                            <strong>School Management Team</strong>
+                        </p>
+
+                    </div>
+
+                    <div style="background:#f5f5f5;
+                        text-align:center;
+                        padding:12px;
+                        font-size:12px;
+                        color:#666;">
+                        This is an automated email from the School Management System.
+                    </div>
+
+                </div>
+            </field>
+        </record>
+        <record id="email_template_school_unpaid" model="mail.template">
+            <field name="name">Student Payment Reminder</field>
+            <field name="model_id" ref="school_MGM.model_school_student"/>
+            <field name="subject"> Payment Reminder - {{ object.student_code }} </field>
+            <field name="email_to">{{ object.email }}</field>
+
+            <field name="body_html" type="html">
+                <div style="font-family:Arial,Helvetica,sans-serif;
+                    max-width:650px;
+                    margin:auto;
+                    border:1px solid #ddd;
+                    border-radius:8px;
+                    overflow:hidden;">
+
+                    <div style="background:#d9534f;
+                        color:white;
+                        padding:18px;
+                        text-align:center;">
+                        <h2 style="margin:0;">School Management System</h2>
+                        <p style="margin:5px 0 0 0;">
+                            Payment Reminder
+                        </p>
+                    </div>
+
+                    <div style="padding:25px;">
+
+                        <p>Dear <strong><t t-out="object.name"/></strong>,</p>
+
+                        <p>
+                            Our records indicate that your registration payment
+                            has <strong>not yet been received</strong>.
+                        </p>
+
+                        <p>
+                            Please complete your payment as soon as possible to
+                            avoid any interruption to your enrollment process.
+                        </p>
+
+                        <table style="width:100%;border-collapse:collapse;margin-top:20px;">
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;"><strong>Student Code</strong></td>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <t t-out="object.student_code"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;"><strong>Name</strong></td>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <t t-out="object.name"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;"><strong>Email</strong></td>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <t t-out="object.email"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;"><strong>Phone</strong></td>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <t t-out="object.phone"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;"><strong>Major</strong></td>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <t t-out="object.major_id.name"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;"><strong>Group</strong></td>
+                                <td style="padding:8px;border:1px solid #ddd;">
+                                    <t t-out="object.group_id.name"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px;border:1px solid #ddd;"><strong>Status</strong></td>
+                                <td style="padding:8px;border:1px solid #ddd;color:#d9534f;">
+                                    <strong>Payment Pending</strong>
+                                </td>
+                            </tr>
+
+                        </table>
+
+                        <div style="margin-top:20px;
+                            padding:15px;
+                            background:#fff3cd;
+                            border-left:5px solid #ffc107;">
+                            <strong>Reminder:</strong><br/>
+                            Please visit the school finance office or use the
+                            available payment methods to complete your payment.
+                        </div>
+
+                        <p style="margin-top:20px;">
+                            If you have already completed the payment, please
+                            disregard this email or contact our finance office.
+                        </p>
+
+                        <p>
+                            Best Regards,<br/>
+                            <strong>School Management Team</strong>
+                        </p>
+
+                    </div>
+
+                    <div style="background:#f5f5f5;
+                        text-align:center;
+                        padding:12px;
+                        font-size:12px;
+                        color:#666;">
+                        This is an automated payment reminder from the School
+                        Management System.
+                    </div>
+
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

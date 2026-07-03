@@ -1,0 +1,14 @@
+.o_list_view .o_data_row.text-success td {
+    background-color: #d4edda !important;
+    color: inherit !important;
+}
+
+.o_list_view .o_data_row.text-warning td {
+    background-color: #fff3cd !important;
+    color: inherit !important;
+}
+
+.o_list_view .o_data_row.text-danger td {
+    background-color: #f8d7da !important;
+    color: inherit !important;
+}

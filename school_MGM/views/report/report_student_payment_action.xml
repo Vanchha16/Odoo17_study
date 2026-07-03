@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_student_payment" model="ir.actions.report">
+        <field name="name">Student Payment Receipt</field>
+        <field name="model">school.payment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">school_MGM.report_student_payment_template</field>
+        <field name="report_file">school_MGM.report_student_payment_template</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+</odoo>

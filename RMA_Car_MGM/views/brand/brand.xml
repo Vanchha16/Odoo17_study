@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_brand_search">
+        <field name="name">brand_view_search</field>
+        <field name="model">rma.brand</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <filter name="Inactive" domain="[('status', '=', 'inactive')]"/>
+                <filter name="Active" domain="[('status', '=', 'active')]"/>
+            </search>
+        </field>
+    </record>
+    <record id="view_brand_tree" model="ir.ui.view">
+        <field name="name">brand_view_tree</field>
+        <field name="model">rma.brand</field>
+        <field name="arch" type="xml">
+            <tree string="Brands">
+                <field name="avatar_128" widget="image" options="{'size': [60, 60]}"/>
+                <field name="name"/>
+                <field name="status"/>
+                <field name="car_count_label"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_brand_form">
+        <field name="name">brand_view_form</field>
+        <field name="model">rma.brand</field>
+        <field name="arch" type="xml">
+            <form string="Brands">
+                <sheet>
+                    <group>
+                        <group string="Brand Info">
+                            <field name="name" string="Brand Name"/>
+                            <field name="image" string="Image" widget="image"/>
+                            <field name="status" string="Status"/>
+                        </group>
+                        <group string="Car Info">
+                            <field name="car_count_label" string="Car Count" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                 <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rma_brand" model="ir.actions.act_window">
+        <field name="name">Add/Edit Brands</field>
+        <field name="view_ids" eval="[
+                    Command.clear(),
+                    (0, 0, {'view_mode': 'tree', 'view_id': ref('view_brand_tree')}),
+                    (0, 0, {'view_mode': 'form', 'view_id': ref('view_brand_form')})
+                ]"/>
+        <field name="res_model">rma.brand</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

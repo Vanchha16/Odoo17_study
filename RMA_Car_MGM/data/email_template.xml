@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="email_template_test_drive_confirmed" model="mail.template">
+            <field name="name">Test Drive Confirmed</field>
+            <field name="model_id" ref="RMA_Car_MGM.model_rma_cus_car_test"/>
+            <field name="subject">Your Test Drive is Confirmed - {{ object.booking_code }}</field>
+            <field name="email_to">{{ object.customer_id.email }}</field>
+            <field name="body_html" type="html">
+                <div style="font-family: Arial, sans-serif; padding: 20px;">
+                    <h2>Test Drive Confirmed!</h2>
+                    <p>Dear <t t-out="object.customer_id.name"/>,</p>
+                    <p>Your test drive booking has been confirmed.</p>
+                    <p>Booking Reference: <t t-out="object.booking_code"/></p>
+                    <p>Vehicle: <t t-out="object.car_id.name"/></p>
+                    <p>Date and Time: <t t-out="object.test_time"/></p>
+                    <p>We look forward to seeing you!</p>
+                    <p>Best regards,<br/>RMA Car Sales Team</p>
+                </div>
+            </field>
+        </record>
+        <record id="email_template_sale_order_done" model="mail.template">
+            <field name="name">Sale Order: Done Notification</field>
+            <field name="model_id" ref="RMA_Car_MGM.model_rma_sale_order"/>
+            <field name="subject">Your Car Purchase Receipt - {{ object.sale_code }}</field>
+            <field name="email_to">{{ object.customer_id.email }}</field>
+            <field name="report_template_ids" eval="[(4, ref('RMA_Car_MGM.action_report_sale_order_invoice'))]"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html" type="html">
+                <div style="font-family: Arial, sans-serif; padding: 20px;">
+                    <h2>Thank You for Your Purchase!</h2>
+                    <p>Dear <t t-out="object.customer_id.name"/>,</p>
+                    <p>Your car purchase has been completed successfully.</p>
+                    <p>Sale Reference: <t t-out="object.sale_code"/></p>
+                    <p>Vehicle: <t t-out="object.car_id.name"/></p>
+                    <p>Quantity: <t t-out="object.qty"/></p>
+                    <p>Please find your invoice attached to this email.</p>
+                    <p>Best regards,<br/>RMA Car Sales Team</p>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

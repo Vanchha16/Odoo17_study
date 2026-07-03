@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_salesperson_tree">
+        <field name="name">seller_view_tree</field>
+        <field name="model">rma.seller</field>
+        <field name="arch" type="xml">
+            <tree string="Sale">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="address"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_salesperson_form">
+        <field name="name">seller_view_form</field>
+        <field name="model">rma.seller</field>
+        <field name="arch" type="xml">
+            <form string="Sellers">
+                <header>
+                    <button name="action_save_seller"
+                        string="Save"
+                        type="object"
+                        class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Seller Info">
+                            <field name="name" string="Seller Name"/>
+                            <field name="phone" string="Phone"/>
+                            <field name="email" string="Email"/>
+                            <field name="address" string="Address"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Reports" >
+                            <field name="sale_history_id">
+                                <tree delete="0">
+                                    <field name="customer_id" string="Customer Name"/>
+                                    <field name="car_id" string="Vehicle"/>
+                                    <field name="qty" string="Quantity"/>
+                                    <field name="commission_amount" string="Commission Amount $"  readonly="True" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="commission_rate" string="Commission Rate"/>
+                                    <field name="car_price" string="Car Price $"  readonly="True" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="sale_date" string="Sale Date"/>
+                                    <field name="status" widget="badge"
+                                            decoration-it="status == 'draft'"
+                                            decoration-info="status == 'delivered'"
+                                            decoration-success="status == 'done'"
+                                            decoration-danger="status == 'cancelled'"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_salesperson">
+        <field name="name">Seller</field>
+        <field name="res_model">rma.seller</field>
+        <field name="context"/>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="view_ids" eval="[
+                    Command.clear(),
+                    (0, 0, {'view_mode': 'tree', 'view_id': ref('view_salesperson_tree')}),
+                    (0, 0, {'view_mode': 'form', 'view_id': ref('view_salesperson_form')})
+                ]"/>
+        <field name="help" type="html" >
+            <p class="o_view_nocontent_smiling_face">
+                Create Seller to manage seller effectively.
+            </p>
+        </field>
+    </record>
+</odoo>

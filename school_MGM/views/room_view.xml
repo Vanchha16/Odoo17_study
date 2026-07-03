@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+<!--    <record model="ir.ui.view" id="view_school_room_tree">-->
+<!--        <field name="name">school.room.tree</field>-->
+<!--        <field name="model">school.room</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <tree string="Rooms" editable="top">-->
+<!--                <field name="floor"/>-->
+<!--                <field name="room_code"/>-->
+<!--                <field name="room_label"/>-->
+<!--                <field name="capacity"/>-->
+<!--            </tree>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record model="ir.ui.view" id="view_school_room_form">
+        <field name="name">school.room.form</field>
+        <field name="model">school.room</field>
+        <field name="arch" type="xml">
+            <form string="Room">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="room_label" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Room Info">
+                            <field name="floor"/>
+                            <field name="room_code"/>
+                            <field name="capacity"/>
+                        </group>
+<!--                        <group string="Notes">-->
+<!--                            <field name="note" nolabel="1"-->
+<!--                                   placeholder="Additional notes..."/>-->
+<!--                        </group>-->
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_school_room_kanban">
+        <field name="name">school.room.kanban</field>
+        <field name="model">school.room</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="floor" editable="bottom">
+                <field name="sequence"/>
+                <field name="floor"/>
+                <field name="room_code"/>
+                <field name="room_label"/>
+                <field name="capacity"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click"
+                             style="border-left: 3px solid #534AB7; padding: 1rem;">
+
+                            <div style="font-size: 22px; font-weight: 500;
+                                        color: #534AB7; margin-bottom: 8px;">
+                                <field name="room_label"/>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2 mb-1"
+                                 style="font-size: 13px;">
+                                <i class="fa fa-building-o" aria-hidden="true"
+                                   style="color: #888;"/>
+                                <span style="color: #888;">Floor:</span>
+                                <field name="floor"/>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2 mb-1"
+                                 style="font-size: 13px;">
+                                <i class="fa fa-door-open" aria-hidden="true"
+                                   style="color: #888;"/>
+                                <span style="color: #888;">Room:</span>
+                                <field name="room_code"/>
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2"
+                                 style="font-size: 13px;">
+                                <i class="fa fa-users" aria-hidden="true"
+                                   style="color: #888;"/>
+                                <span style="color: #888;">Capacity:</span>
+                                <field name="capacity"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_school_room" model="ir.actions.act_window">
+        <field name="name">Rooms</field>
+        <field name="res_model">school.room</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="view_ids" eval="[
+            Command.clear(),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_school_room_kanban')}),
+            (0, 0, {'view_mode': 'form',   'view_id': ref('view_school_room_form')})
+        ]"/>
+    </record>
+
+</odoo>

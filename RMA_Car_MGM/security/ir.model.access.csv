@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rma_car_manager,rma.car.manager,model_rma_car,RMA_Car_MGM.group_rma_manager,1,0,0,0
+access_rma_car_admin,rma.car.admin,model_rma_car,RMA_Car_MGM.group_rma_admin,1,1,1,1
+access_rma_brand,rma.brand,model_rma_brand,,1,1,1,1
+access_rma_customer,rma.customer,model_rma_customer,,1,1,1,1
+access_rma_seller,rma.seller,model_rma_seller,,1,1,1,1
+access_rma_sale_order,rma.sale_order,model_rma_sale_order,,1,1,1,1
+access_rma_cus_car_test,rma.cus.car.test,model_rma_cus_car_test,,1,1,1,1
+access_rma_car_test_plate,rma.car.test.plate,model_rma_car_test_plate,,1,1,1,1
+access_rma_demo_car,rma.demo.car,model_rma_demo_car,,1,1,1,1
+access_rma_not_interested_wizard,rma.not.interested.wizard,model_rma_not_interested_wizard,,1,1,1,1

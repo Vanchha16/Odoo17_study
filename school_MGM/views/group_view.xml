@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_school_group_tree">
+        <field name="name">school.group.tree</field>
+        <field name="model">school.group</field>
+        <field name="arch" type="xml">
+            <tree string="Groups">
+<!--                <field name="name"/>-->
+                <field name="display_group_name"/>
+                <field name="period" string="Period" />
+                <field name="academic_year_id"/>
+                <field name="semester_id"/>
+                <field name="program_year_id"/>
+                <field name="major_id"/>
+                <field name="teacher_ids" string="Teacher" />
+                <field name="student_count" string="Students" />
+            </tree>
+        </field>
+    </record>
+    <record id="view_school_group_kanban" model="ir.ui.view">
+        <field name="name">school.group.kanban</field>
+        <field name="model">school.group</field>
+        <field name="arch" type="xml">
+            <kanban>
+<!--                <field name="name"/>-->
+                <field name="display_group_name"/>
+                <field name="period"/>
+                <field name="student_count"/>
+                <field name="teacher_count"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click"
+                             style="border-left: 3px solid #534AB7; padding: 1rem;">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div style="width:36px; height:36px; border-radius:50%;
+                                            background:#EEEDFE; display:flex;
+                                            align-items:center; justify-content:center;
+                                            font-size:13px; font-weight:500; color:#534AB7;">
+                                    <t t-esc="record.display_group_name.value.toUpperCase()"/>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2"
+                                 style="font-size:13px; color:#888780;">
+                                <i class="fa fa-calendar" aria-hidden="true"/>
+                                <t t-esc="record.period.value"/>Period
+                            </div>
+                            <div class="d-flex align-items-center gap-2"
+                                 style="font-size:13px; color:#888780;">
+                                <i class="fa fa-user" aria-hidden="true"/>
+                                <t t-esc="record.student_count.value"/> Students
+                            </div>
+                            <div class="d-flex align-items-center gap-2"
+                                 style="font-size:13px; color:#888780;">
+
+                                 <i class="fa fa-user" aria-hidden="true"/>
+                                <t t-esc="record.teacher_count.value"/> Teachers
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="view_school_group_form" model="ir.ui.view">
+        <field name="name">school.group.form</field>
+        <field name="model">school.group</field>
+        <field name="arch" type="xml">
+            <form string="Group">
+                <sheet>
+                    <group>
+                        <group string="Group Info">
+                            <field name="display_group_name"/>
+                            <field name="label_id"/>
+                            <field name="name"/>
+                            <field name="academic_year_id"/>
+                            <field name="semester_id"/>
+                            <field name="program_year_id"/>
+                            <field name="major_id"/>
+                            <field name="period"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Teachers">
+                            <field name="teacher_ids" />
+                        </page>
+                        <page string="Students">
+                            <field name="student_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="age"/>
+                                    <field name="email"/>
+                                    <field name="phone"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+
+                </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_school_group" model="ir.actions.act_window">
+        <field name="name">Groups</field>
+        <field name="res_model">school.group</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_ids" eval="[
+            Command.clear(),
+            (0, 0, {'view_mode': 'tree',   'view_id': ref('view_school_group_tree')}),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_school_group_kanban')}),
+            (0, 0, {'view_mode': 'form',   'view_id': ref('view_school_group_form')})
+        ]"/>
+    </record>
+</odoo>

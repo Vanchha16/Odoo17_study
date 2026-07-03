@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record model="ir.ui.view" id="rma_car_search">
+        <field name="name">rma_car_search</field>
+        <field name="model">rma.car</field>
+        <field name="arch" type="xml">
+            <search string="Vehicles">
+                <field name="name" filter_domain="['|', '|', '|',
+                        ('name',      'ilike', self),
+                        ('model',     'ilike', self),
+                        ('engine',    'ilike', self),
+                        ('colorcode', 'ilike', self)]" string="Search"/>
+                <field name="year" string="Year" filter_domain="[('year', '=', self)]"/>
+                <separator/>
+                <filter name="filter_2023" string="Year 2023" domain="[('year', '=', 2023)]"/>
+                <filter name="filter_2022" string="Year 2022" domain="[('year', '=', 2022)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_brand" string="Brand" context="{'group_by': 'brand_id'}"/>
+                    <filter name="group_year" string="Year" context="{'group_by': 'year'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_car_tree" model="ir.ui.view">
+        <field name="name">car_view_tree</field>
+        <field name="model">rma.car</field>
+        <field name="arch" type="xml">
+            <tree string="Vehicles">
+                <field name="name"/>
+                <field name="qty"/>
+                <field name="car_availability"/>
+                <field name="model"/>
+                <field name="colorcode"/>
+                <field name="year"/>
+                <field name="engine"/>
+                <field name="price"/>
+                <field name="commission_rate"/>
+                <field name="brand_id" widget="many2one_avatar"/>
+                <field name="create_uid"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_brand_kanban" model="ir.ui.view">
+        <field name="name">rma.brand.kanban</field>
+        <field name="model">rma.brand</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="avatar_128"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click" style="text-align:center; padding:10px;">
+                            <img t-att-src="kanban_image('rma.brand', 'avatar_128', record.id.raw_value)" style="width:80px; height:80px; object-fit:contain;"/>
+                            <div style="margin-top:8px;">
+                                <field name="name"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_car_form">
+        <field name="name">car_view_form</field>
+        <field name="model">rma.car</field>
+        <field name="arch" type="xml">
+            <form string="Vehicles">
+                <sheet>
+                    <group>
+                        <group string="Car Info">
+                            <field name="name" string="Car Name"/>
+                            <field name="qty" string="Quantity"/>
+                            <field name="model"/>
+                            <field name="colorcode"/>
+                            <field name="year"/>
+                            <field name="engine"/>
+                            <field name="price"/>
+                            <field name="commission_rate"/>
+                        </group>
+                        <group string="Brands">
+                            <field name="brand_id" widget="many2one_avatar"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Customer Info">
+                            <group >
+                                <field name="cus_car_test_ids"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_rma_car" model="ir.actions.act_window">
+        <field name="name">Add/Edit Vehicles</field>
+        <field name="search_view_id" ref="rma_car_search"/>
+        <field name="res_model">rma.car</field>
+        <field name="context" />
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="view_ids" eval="[
+                    Command.clear(),
+                    (0, 0, {'view_mode': 'tree', 'view_id': ref('view_car_tree')}),
+                    (0, 0, {'view_mode': 'form', 'view_id': ref('view_car_form')})
+                ]"/>
+    </record>
+</odoo>

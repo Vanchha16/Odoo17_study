@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_cus_test_drive_tree">
+        <field name="name">cus_test_drive_view_tree</field>
+        <field name="model">rma.cus.car.test</field>
+        <field name="arch" type="xml">
+            <tree string="Test Drive">
+                <field name="booking_code" string="Booking Ref"/>
+                <field name="customer_id" string="Customer Name"/>
+                <field name="car_id" string="Vehicle"/>
+                <field name="test_time" string="Date and Time"/>
+                <field name="test_time_end" string="Return Date"/>
+                <field name="status" string="Status" widget="badge" decoration-warning="status == 'pending'" decoration-success="status == 'confirmed'" decoration-danger="status == 'not_interested'"/>
+                <field name="test_notes" string="Notes" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="cus_test_drive_from">
+        <field name="name">Test Drive</field>
+        <field name="model">rma.cus.car.test</field>
+        <field name="arch" type="xml">
+            <form string="Test Drive">
+                <header>
+                    <button name="action_pending" string="Save" type="object" class="btn-primary me-2" invisible="status != 'draft'"/>
+                    <button name="action_confirm" string="Confirm" type="object" class="btn-success" invisible="status != 'pending'"/>
+                    <button name="action_not_interested" string="Not Interested" type="object" class="btn-danger ms-2" invisible="status != 'pending'"/>
+                    <button name="action_cancel" string="Cancel" type="object" class="btn-secondary ms-2" invisible="status != 'pending'"/>
+                    <button special="cancel" string="Discard" class="btn-secondary" invisible="status != 'draft'"/>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,pending,confirmed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_sale_order"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-file-text-o"
+                            invisible="not sale_order_id">
+                            <field name="sale_order_id" widget="statinfo" string="Sale Order"/>
+                        </button>
+                    </div>
+                    <group string="Customer Info">
+                        <group>
+                            <field name="customer_id" string="Customer Name"/>
+                            <field name="phone" string="Phone"/>
+                            <field name="email" string="Email"/>
+                            <field name="address" string="Address"/>
+                        </group>
+                        <group>
+                            <field name="test_time" string="Date and Time"/>
+                            <field name="test_time_end" string="End Time"/>
+                            <field name="test_notes" string="Notes"/>
+                            <field name="status" string="Status" widget="badge" decoration-info="status == 'draft'" decoration-warning="status == 'pending'" decoration-success="status == 'confirmed'" decoration-danger="status == 'not_interested'"/>
+                            <field name="not_interested_reason" string="Reason" invisible="status != 'not_interested'"/>
+                        </group>
+                        <group string="Booking Test Drive">
+                            <field name="car_id" string="Car Name"/>
+                            <field name="brand_id" string="Brand" widget="many2one_avatar"/>
+                            <field name="model" string="Model"/>
+                            <field name="year" string="Year"/>
+                            <field name="sale_order_id" string="Sale Order" readonly="1" invisible="sale_order_id == False"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+
+            </form>
+
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_cus_test_drive">
+        <field name="name">Test Drive</field>
+        <field name="res_model">rma.cus.car.test</field>
+        <field name="context"/>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[
+                Command.clear(),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_cus_test_drive_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('cus_test_drive_from')})
+            ]"/>
+    </record>
+    <record id="view_not_interested_wizard" model="ir.ui.view">
+        <field name="name">not.interested.wizard.form</field>
+        <field name="model">rma.not.interested.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Why Not Interested?">
+                <group>
+                    <field name="reason" placeholder="Enter reason..."/>
+                </group>
+                <footer>
+                    <button string="Confirm" name="action_confirm" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

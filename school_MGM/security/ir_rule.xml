@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <!-- Student: see only timetable entries for their group -->
+        <record id="rule_student_timetable" model="ir.rule">
+            <field name="name">Student: View Own Group Timetable</field>
+            <field name="model_id" ref="school_MGM.model_school_timetable"/>
+            <field name="groups" eval="[Command.set([ref('school_MGM.group_school_student')])]"/>
+            <field name="domain_force">[('group_id.student_ids.user_id', '=', user.id)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Student: see only students in their own group -->
+        <record id="rule_student_classmates" model="ir.rule">
+            <field name="name">Student: View Own Group Students</field>
+            <field name="model_id" ref="school_MGM.model_school_student"/>
+            <field name="groups" eval="[Command.set([ref('school_MGM.group_school_student')])]"/>
+            <field name="domain_force">[('group_id.student_ids.user_id', '=', user.id)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record model="ir.rule" id="rule_teacher_students">
+            <field name="name">Teacher: View Own Group</field>
+            <field name="model_id" ref="school_MGM.model_school_student"/>
+            <field name="groups" eval="[Command.set([ref('school_MGM.group_school_teacher')])]"/>
+            <field name="domain_force">[('group_id.teacher_ids.user_id', '=', user.id)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record model="ir.rule" id="rule_teacher_timetable">
+            <field name="name">Teacher: View Own Group Timetable</field>
+            <field name="model_id" ref="school_MGM.model_school_timetable"/>
+            <field name="groups" eval="[Command.set([ref('school_MGM.group_school_teacher')])]"/>
+            <field name="domain_force">[('group_id.teacher_ids.user_id', '=', user.id)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+         <record model="ir.rule" id="rule_dean_view_own_record_only">
+            <field name="name">Dean: View Own Record</field>
+            <field name="model_id" ref="school_MGM.model_school_group"/>
+            <field name="groups" eval="[Command.set([ref('school_MGM.group_school_dean')])]"/>
+            <field name="domain_force">[('create_uid', '=', user.id)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

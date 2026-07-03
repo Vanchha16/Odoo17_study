@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="cus_register_view_form">
+        <field name="name">cus_register_view_form</field>
+        <field name="model">rma.customer</field>
+        <field name="arch" type="xml">
+            <form string="Customers">
+                <sheet>
+                    <group>
+                        <group string="Customer Info">
+                            <field name="name" string="Customer Name"/>
+                            <field name="phone" string="Phone"/>
+                            <field name="email" string="Email"/>
+                            <field name="address" string="Address"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_cus_register">
+        <field name="name">action_cus_register</field>
+        <field name="res_model">rma.customer</field>
+        <field name="context"/>
+        <field name="view_mode">form</field>
+        <field name="view_ids" eval="[
+                    Command.clear(),
+                    (0, 0, {'view_mode': 'form', 'view_id': ref('cus_register_view_form')})
+                ]"/>
+    </record>
+</odoo>

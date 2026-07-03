@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_account_move_form">
+        <field name="name">account.move.school.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="placeholder">Enter Student ID</attribute>
+            </xpath>
+<!--            <xpath expr="//field[@name='partner_id']" position="replace">-->
+<!--                <field name="student_id" placeholder="Enter Student ID"/>-->
+<!--            </xpath>-->
+            <!-- Inject school fields after the Company Name field -->
+<!--            <xpath expr="//field[@name='parent_id']" position="before">-->
+<!--                <field name="is_school_partner"/>-->
+<!--                <field name="school_partner_role" string="Partner Role" placeholder="Select Partner Role"-->
+<!--                       invisible="not is_school_partner"/>-->
+<!--                <field name="moe_ref_no" string="MOE Ref No." placeholder="Enter MOE Ref No."-->
+<!--                       invisible="not is_school_partner"/>-->
+<!--                <field name="student_id" string="Student ID" placeholder="Enter Student ID"-->
+<!--                       invisible="not is_school_partner"/>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//notebook" position="inside">-->
+<!--                <page string="School Info"-->
+<!--                      invisible="school_partner_role == 'none'">-->
+<!--                    <group>-->
+<!--                        <field name="moe_ref_no"/>-->
+<!--                        <field name="student_id"/>-->
+<!--                    </group>-->
+<!--                </page>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='vat']" position="replace">-->
+<!--                <field name="student_id" />-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='phone']" position="attributes">-->
+<!--                <attribute name="invisible">1</attribute>-->
+<!--                <attribute name="required">1</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='email']" position="after">-->
+<!--                <field name="email" placeholder="Optional note about this email"/>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//page[@name='contact_addresses']" position="attributes">-->
+<!--                <attribute name="invisible">1</attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//notebook" position="attributes">-->
+<!--                <attribute name="invisible">1</attribute>-->
+<!--            </xpath>-->
+
+        </field>
+    </record>
+</odoo>

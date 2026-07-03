@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_school_program_year_tree">
+        <field name="name">school.program.year.tree</field>
+        <field name="model">school.program.year</field>
+        <field name="arch" type="xml">
+            <tree string="Program Years">
+                <field name="year_number"/>
+                <field name="label"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_school_program_year_kanban">
+        <field name="name">school.program.year.kanban</field>
+        <field name="model">school.program.year</field>
+        <field name="arch" type="xml">
+            <kanban string="Program Years" class="o_kanban_mobile" sample="1">
+                <field name="year_number"/>
+                <field name="label"/>
+                <field name="description"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click o_kanban_record p-3 mb-2 bg-white rounded-3 border border-1 border-200 shadow-sm d-flex flex-column justify-content-between position-relative overflow-hidden"
+                             style="min-height: 110px;">
+
+                            <!-- Top Header Row -->
+                            <div class="d-flex justify-content-between align-items-start border-bottom pb-2 mb-2">
+                                <div>
+                                    <!-- Main Label -->
+                                    <strong class="text-dark fs-5 fw-bold d-block">
+                                        <field name="label"/>
+                                    </strong>
+                                </div>
+
+                                <!-- Subtle Numeric Level Tag -->
+                                <span class="badge bg-primary-light text-primary border border-primary-200 px-2 py-1 fw-bold small rounded-pill">
+                                    Level <t t-out="record.year_number.raw_value"/>
+                                </span>
+                            </div>
+
+                            <!-- Body: Detailed Description Area -->
+                            <div class="o_kanban_record_body flex-grow-1" t-if="record.description.raw_value">
+                                <p class="text-muted small mb-0 lh-base"
+                                   style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 12px;">
+                                    <field name="description"/>
+                                </p>
+                            </div>
+                            <div class="o_kanban_record_body flex-grow-1" t-if="!record.description.raw_value">
+                                <span class="text-muted-light small italic">No description provided.</span>
+                            </div>
+
+                            <!-- Card Footer Decorative Detail Line -->
+                            <div class="mt-2 pt-1 d-flex justify-content-between align-items-center text-xxs tracking-wider text-uppercase fw-semibold text-muted">
+                                <span>Academic Tier</span>
+                                <i class="fa fa-chevron-right text-300 small"/>
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_school_program_year_form">
+        <field name="name">school.program.year.form</field>
+        <field name="model">school.program.year</field>
+        <field name="arch" type="xml">
+            <form string="Program Year">
+                <sheet>
+                    <group>
+                        <field name="year_number"/>
+                        <field name="label"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_school_program_year">
+        <field name="name">Program Years</field>
+        <field name="res_model">school.program.year</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_ids" eval="[
+            Command.clear(),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_school_program_year_tree')}),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_school_program_year_kanban')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_school_program_year_form')})
+        ]"/>
+    </record>
+</odoo>

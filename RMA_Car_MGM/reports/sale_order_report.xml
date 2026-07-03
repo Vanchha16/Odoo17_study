@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="action_report_sale_order_invoice" model="ir.actions.report">
+        <field name="name">Sale Invoice</field>
+        <field name="model">rma.sale_order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">RMA_Car_MGM.report_sale_order_invoice_template</field>
+        <field name="report_file">RMA_Car_MGM.report_sale_order_invoice_template</field>
+        <field name="binding_model_id" ref="model_rma_sale_order"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_sale_order_invoice_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h2>Sale Invoice</h2>
+                                <p><strong>Invoice No:</strong> <span t-esc="o.sale_code"/></p>
+                                <p><strong>Date:</strong> <span t-esc="o.sale_date"/></p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p><strong>Status:</strong> <span t-esc="dict(o._fields['status'].selection).get(o.status)"/></p>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h4>Customer</h4>
+                                <p t-esc="o.customer_id.name"/>
+                            </div>
+                            <div class="col-6">
+                                <h4>Seller</h4>
+                                <p t-esc="o.seller_id.name"/>
+                            </div>
+                        </div>
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Car</th>
+                                    <th>Brand</th>
+                                    <th>Model</th>
+                                    <th>Year</th>
+                                    <th>Color</th>
+                                    <th>Engine</th>
+                                    <th>Qty</th>
+                                    <th>Unit Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td t-esc="o.car_id.name"/>
+                                    <td t-esc="o.brand_id.name"/>
+                                    <td t-esc="o.models"/>
+                                    <td t-esc="o.years"/>
+                                    <td t-esc="o.colors"/>
+                                    <td t-esc="o.engines"/>
+                                    <td t-esc="o.qty"/>
+                                    <td t-esc="o.car_price" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    <td t-esc="o.car_price * o.qty" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="row mt-4">
+                            <div class="col-6 offset-6">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Subtotal</strong></td>
+                                        <td class="text-end">
+                                            <span t-esc="o.car_price * o.qty" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Commission (<span t-esc="o.commission_rate"/>%)</strong></td>
+                                        <td class="text-end">
+                                            <span t-esc="o.commission_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ───────────────────────────────────────────
+             FORM VIEW
+        ─────────────────────────────────────────── -->
+        <record id="view_school_payment_form" model="ir.ui.view">
+            <field name="name">school.payment.form</field>
+            <field name="model">school.payment</field>
+            <field name="arch" type="xml">
+                <form string="Payment">
+                    <header>
+                        <field name="payment_amount" widget="statusbar"
+                               statusbar_visible="unpaid,paid_50,paid"/>
+                        <button name="action_confirm_payment" string="Confirm Payment" type="object"
+                        />
+                        <button name="action_print_receipt"
+                                string="Print Receipt"
+                                type="object"
+                                class="btn-secondary"
+                                invisible="payment_amount != 'paid' and payment_amount != 'paid_50'"/>
+                    </header>
+
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="reference" class="oe_edit_only"/>
+                            <h1>
+                                <field name="reference" placeholder="e.g. PAY/2024/0001"/>
+                            </h1>
+                        </div>
+
+                        <group>
+                            <group string="Related To">
+                                <field name="major_id"/>
+                                <field name="group_id"/>
+                                <field name="student_id"
+                                       domain="[('group_id', '=', group_id)]"
+                                       context="{'default_group_id': group_id}"
+                                       options="{'no_create_edit': True}"/>
+                                <field name="academic_year_id"/>
+                                <field name="semester_id"/>
+                                <field name="program_year_id"/>
+                            </group>
+                            <group string="Payment Info">
+                                <field name="payment_date"/>
+                                <field name="payment_amount"/>
+                                <!--                                <field name="over_due"/>-->
+                                <field name="payment_method"/>
+                            </group>
+                        </group>
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+        <!-- ───────────────────────────────────────────
+             TREE / LIST VIEW
+        ─────────────────────────────────────────── -->
+        <record id="view_school_payment_tree" model="ir.ui.view">
+            <field name="name">school.payment.tree</field>
+            <field name="model">school.payment</field>
+            <field name="arch" type="xml">
+                <tree string="Payments" decoration-success="payment_amount == 'paid'"
+                      decoration-warning="payment_amount == 'paid_50'" decoration-danger="payment_amount == 'unpaid'">
+                    <field name="reference"/>
+                    <field name="payment_date"/>
+                    <field name="student_id"/>
+                    <field name="group_id"/>
+                    <field name="major_id"/>
+                    <field name="payment_amount" widget="badge"
+                           decoration-success="payment_amount == 'paid'"
+                           decoration-warning="payment_amount == 'paid_50'"
+                           decoration-danger="payment_amount == 'unpaid'"/>
+                    <field name="payment_method"/>
+                    <!--                    <field name="over_due" widget="badge"-->
+                    <!--                           decoration-danger="over_due == 'yes'"-->
+                    <!--                           decoration-success="over_due == 'no'"/>-->
+                </tree>
+            </field>
+        </record>
+
+        <!-- ───────────────────────────────────────────
+             SEARCH VIEW
+        ─────────────────────────────────────────── -->
+        <record id="view_school_payment_search" model="ir.ui.view">
+            <field name="name">school.payment.search</field>
+            <field name="model">school.payment</field>
+            <field name="arch" type="xml">
+                <search string="Search Payments">
+                    <field name="reference"/>
+                    <field name="student_id"/>
+                    <field name="group_id"/>
+                    <field name="major_id"/>
+                    <filter string="Paid" name="filter_paid"
+                            domain="[('payment_amount', '=', 'paid')]"/>
+                    <filter string="Paid 50%" name="filter_paid_50"
+                            domain="[('payment_amount', '=', 'paid_50')]"/>
+                    <filter string="Unpaid" name="filter_unpaid"
+                            domain="[('payment_amount', '=', 'unpaid')]"/>
+                    <separator/>
+                    <!--                    <filter string="Overdue" name="filter_overdue"-->
+                    <!--                            domain="[('over_due', '=', 'yes')]"/>-->
+                    <group expand="0" string="Group By">
+                        <filter string="Student" name="group_student"
+                                context="{'group_by': 'student_id'}"/>
+                        <filter string="Major" name="group_major"
+                                context="{'group_by': 'major_id'}"/>
+                        <filter string="Payment Status" name="group_status"
+                                context="{'group_by': 'payment_amount'}"/>
+                        <filter string="Payment Date" name="group_date"
+                                context="{'group_by': 'payment_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record model="ir.actions.server" id="action_send_email_unpaid_student">
+            <field name="name">Send Payment Reminder</field>
+            <field name="model_id" ref="model_school_payment"/>
+            <field name="binding_model_id" ref="model_school_payment"/>
+            <field name="binding_type">action</field>
+            <field name="state">code</field>
+            <field name="code">
+                for rec in records:
+                    if rec.payment_amount == 'unpaid' and rec.student_id.email:
+                        template = env.ref('school_MGM.email_template_school_unpaid', raise_if_not_found=False)
+                        if template:
+                            template.send_mail(rec.student_id.id, force_send=True)
+            </field>
+        </record>
+        <record model="ir.actions.server" id="action_set_to_paid">
+            <field name="name">Set to Paid</field>
+            <field name="model_id" ref="model_school_payment"/>
+            <field name="binding_model_id" ref="model_school_payment"/>
+            <field name="binding_type">action</field>
+            <field name="state">code</field>
+            <field name="code">
+                for rec in records:
+                    if rec.payment_amount != 'paid':
+                        rec.write({'payment_amount': 'paid'})
+            </field>
+        </record>
+        <!-- ───────────────────────────────────────────
+             ACTION
+        ─────────────────────────────────────────── -->
+        <record id="action_school_payment" model="ir.actions.act_window">
+            <field name="name">Payments</field>
+            <field name="res_model">school.payment</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_school_payment_search"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No payments found
+                </p>
+                <p>Create a new payment record to get started.</p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

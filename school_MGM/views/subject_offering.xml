@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_school_subject_offering_tree">
+        <field name="name">school.subject.offering.tree</field>
+        <field name="model">school.subject.offering</field>
+        <field name="arch" type="xml">
+            <tree string="Subject Offerings">
+                <field name="major_id"/>
+                <field name="program_year_id"/>
+                <field name="semester_id"/>
+                <field name="subject_id"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_school_subject_offering_kanban" model="ir.ui.view">
+        <field name="name">school.subject.offering.kanban</field>
+        <field name="model">school.subject.offering</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="major_id">
+                <field name="major_id"/>
+                <field name="subject_id"/>
+                <field name="semester_id"/>
+                <field name="program_year_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click card shadow-sm border-0 h-100 o_subject_offering_card mb-3" >
+
+                            <!-- Header -->
+                            <div class="card-header bg-primary text-white">
+                                <strong>
+                                    <field name="subject_id"/>
+                                </strong>
+                            </div>
+
+                            <!-- Body -->
+                            <div class="card-body">
+
+                                <div class="mb-2">
+                                    <i class="fa fa-graduation-cap text-primary me-2"/>
+                                    <strong>Major:</strong>
+                                    <field name="major_id"/>
+                                </div>
+
+                                <div class="mb-2">
+                                    <i class="fa fa-book text-success me-2"/>
+                                    <strong>Subject:</strong>
+                                    <field name="subject_id"/>
+                                </div>
+
+                                <div class="mb-2">
+                                    <i class="fa fa-calendar text-warning me-2"/>
+                                    <strong>Semester:</strong>
+                                    <field name="semester_id"/>
+                                </div>
+
+                                <div class="mb-2">
+                                    <i class="fa fa-university text-info me-2"/>
+                                    <strong>Program Year:</strong>
+                                    <field name="program_year_id"/>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </t>
+
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_school_subject_offering_form">
+        <field name="name">school.subject.offering.form</field>
+        <field name="model">school.subject.offering</field>
+        <field name="arch" type="xml">
+            <form string="Subject Offering">
+                <sheet>
+                    <group>
+                        <field name="major_id"/>
+                        <field name="program_year_id"/>
+                        <field name="semester_id"/>
+                        <field name="subject_id"/>
+
+
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_school_subject_offering">
+        <field name="name">Subject Offerings</field>
+        <field name="res_model">school.subject.offering</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_ids" eval="[
+            Command.clear(),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_school_subject_offering_tree')}),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_school_subject_offering_kanban')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_school_subject_offering_form')})
+        ]"/>
+    </record>
+</odoo>

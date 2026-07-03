@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_sale_order" model="ir.sequence">
+            <field name="name">Sale Reference</field>
+            <field name="code">rma.sale_order</field>
+            <field name="prefix">SD-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_cus_test_drive" model="ir.sequence">
+            <field name="name">Booking Test Drive Reference</field>
+            <field name="code">rma.cus.car.test</field>
+            <field name="prefix">BTD-</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_school_timetable" model="ir.sequence">
+        <field name="name">School Timetable</field>
+        <field name="code">school.timetable</field>
+        <field name="prefix">SCH/%(year)s/</field>
+        <field name="padding">4</field>
+    </record>
+    <record id="seq_payment" model="ir.sequence">
+        <field name="name">School Payment</field>
+        <field name="code">school.payment</field>
+        <field name="prefix">PAY/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+        <field name="use_date_range">False</field>
+    </record>
+    <record model="ir.sequence" id="seq_student">
+        <field name="name">Student</field>
+        <field name="code">school.student</field>
+        <field name="prefix">STU/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+    </record>
+</odoo>

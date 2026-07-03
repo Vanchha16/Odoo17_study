@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_school_root"
+              name="School Management"
+              sequence="10"
+              web_icon="school_MGM,static/description/icon.png"/>
+    <menuitem id="menu_school_teacher"
+              name="Teachers"
+              parent="menu_school_root"
+              groups="group_school_admin,group_school_teacher,group_school_dean"
+    />
+    <menuitem id="menu_school_Academics"
+              name="Academics"
+              parent="menu_school_root"
+              groups="group_school_admin"
+              sequence="1"
+    />
+    <menuitem id="menu_school_academic_year"
+              name="Majors"
+              parent="menu_school_Academics"
+              action="action_school_major"
+              sequence="1"
+    />
+    <menuitem id="menu_school_academic_major"
+              name="Academic Years"
+              parent="menu_school_Academics"
+              action="action_school_academic_year"
+              sequence="1"
+    />
+    <menuitem id="menu_school_semester"
+              name="Semesters"
+              parent="menu_school_Academics"
+              action="action_school_semester"
+              sequence="2"
+    />
+    <menuitem id="menu_school_program_year"
+              name="Program Years"
+              parent="menu_school_Academics"
+              action="action_school_program_year"
+              sequence="3"
+    />
+    <menuitem id="menu_school_teacher_CRUD"
+              name="Teachers"
+              parent="menu_school_teacher"
+              action="action_school_teacher"
+    />
+    <!--    <menuitem id="menu_school_manage_teacher"-->
+    <!--              name="Manage Teachers"-->
+    <!--              parent="menu_school_teacher"-->
+    <!--              action="action_school_manage_teacher"-->
+    <!--    />-->
+    <menuitem id="menu_school_class"
+              name="Groups"
+              parent="menu_school_root"
+              groups="group_school_admin,group_school_dean"
+              action="action_school_group"
+    />
+    <menuitem id="menu_school_students"
+              name="Students"
+              parent="menu_school_root"
+    />
+    <menuitem id="menu_school_student"
+              name="Students"
+              parent="menu_school_students"
+              action="action_school_student"
+    />
+    <menuitem id="menu_school_all_subjects"
+              name="All Subjects"
+              groups="group_school_admin,group_school_dean"
+              parent="menu_school_root"
+    />
+    <menuitem id="menu_school_subject"
+              name="Subjects"
+              parent="menu_school_all_subjects"
+              groups="group_school_admin,group_school_dean"
+
+              action="action_school_subject"
+    />
+    <menuitem id="menu_school_subject_offering"
+              name="Subject Offerings"
+              parent="menu_school_all_subjects"
+              groups="group_school_admin,group_school_dean"
+
+              action="action_school_subject_offering"
+    />
+    <menuitem id="menu_school_room"
+              name="Rooms"
+              parent="menu_school_root"
+              action="action_school_room"
+              groups="group_school_admin,group_school_dean"
+
+    />
+    <menuitem id="menu_school_schedule"
+              name="Timetable"
+              parent="menu_school_root"
+    />
+    <menuitem id="menu_school_timetable"
+              name="Timetable"
+              parent="menu_school_schedule"
+              action="action_school_timetable"
+    />
+    <menuitem id="menu_school_payment"
+              name="Payments"
+              parent="menu_school_root"
+              action="action_school_payment"
+    />
+    <menuitem id="menu_school_inheritance"
+              name="Inherit"
+              parent="menu_school_root"
+              groups="group_school_admin,group_school_dean"
+    />
+    <menuitem id="menu_res_partner"
+              name="Contacts"
+              parent="menu_school_inheritance"
+              action="contacts.action_contacts"
+    />
+     <menuitem id="menu_purchase_order"
+              name="Purchase Order"
+              parent="menu_school_inheritance"
+              action="purchase.purchase_rfq"
+    />
+    <menuitem id="menu_student_analysis"
+              name="Student Analysis"
+              parent="menu_school_students"
+              action="action_student_analysis"
+              sequence="99"/>
+
+    <menuitem id="menu_study_session"
+              name="Study Sessions"
+              parent="menu_school_schedule"
+              action="action_study_session"
+              sequence="20"/>
+
+    <menuitem id="menu_account_move"
+                name="Invoices"
+                parent="menu_school_inheritance"
+                action="account.action_move_out_invoice_type"
+                sequence="30"/>
+
+    <menuitem id="menu_study_schedule"
+              name="Study Schedules"
+              parent="menu_school_schedule"
+              action="action_study_schedule"
+              sequence="21"/>
+
+</odoo>

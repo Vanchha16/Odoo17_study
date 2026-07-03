@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_customer_tree">
+        <field name="name">customer_view_tree</field>
+        <field name="model">rma.customer</field>
+        <field name="arch" type="xml">
+            <tree string="Customers">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="address"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_customer_form">
+        <field name="name">customer_view_form</field>
+        <field name="model">rma.customer</field>
+        <field name="arch" type="xml">
+            <form string="Customers">
+                <header>
+                    <button name="action_save_custom"
+                        string="Save"
+                        type="object"
+                        class="btn-primary"/>
+                </header>
+                <sheet>
+
+                        <group string="Customer Info">
+                            <field name="name" string="Customer Name"/>
+                            <field name="phone" string="Phone"/>
+                            <field name="email" string="Email"/>
+                            <field name="address" string="Address"/>
+
+                        </group>
+                <notebook >
+                    <page string="Reports" >
+                         <field name="requests_id" >
+                                <tree delete="0">
+                                    <field name="booking_code" string="Booking Ref"/>
+                                    <field name="car_id" string="Vehicle"/>
+                                    <field name="test_time" string="Date and Time"/>
+                                    <field name="test_time_end" string="End Time"/>
+                                    <field name="test_notes" string="Notes"/>
+                                    <field name="status" string="Status" widget="badge"
+                                           decoration-info="status == 'draft'"
+                                           decoration-warning="status == 'pending'"
+                                           decoration-success="status == 'confirmed'"
+                                           decoration-danger="status == 'not_interested'"/>
+                                </tree>
+                            </field>
+                    </page>
+                </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                        </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_customer">
+        <field name="name">Customer</field>
+        <field name="res_model">rma.customer</field>
+        <field name="context"/>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="view_ids" eval="[
+                    Command.clear(),
+                    (0, 0, {'view_mode': 'tree', 'view_id': ref('view_customer_tree')}),
+                    (0, 0, {'view_mode': 'form', 'view_id': ref('view_customer_form')})
+                ]"/>
+        <field name="help" type="html" >
+            <p class="o_view_nocontent_smiling_face">
+                Create Customer to manage customer effectively.
+            </p>
+        </field>
+    </record>
+</odoo>

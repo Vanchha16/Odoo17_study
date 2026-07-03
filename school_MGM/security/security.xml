@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Module category -->
+        <record id="ir_module_category_school" model="ir.module.category">
+            <field name="name">SETEC School Management</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <!-- Admin -->
+        <record id="group_school_admin" model="res.groups">
+            <field name="name">Administrator</field>
+            <field name="category_id" ref="ir_module_category_school"/>
+            <field name="implied_ids" eval="[(6, 0, [ref('base.group_user')])]"/>
+            <field name="comment">Full access to all school features</field>
+        </record>
+
+        <!-- Director (Dean) -->
+        <record id="group_school_dean" model="res.groups">
+            <field name="name">Director</field>
+            <field name="category_id" ref="ir_module_category_school"/>
+            <field name="implied_ids" eval="[(6, 0, [ref('base.group_user')])]"/>
+            <field name="comment">Manage academic structure and approve timetables</field>
+        </record>
+
+        <!-- Teacher -->
+        <record id="group_school_teacher" model="res.groups">
+            <field name="name">Teacher</field>
+            <field name="category_id" ref="ir_module_category_school"/>
+            <field name="implied_ids" eval="[(6, 0, [ref('base.group_user')])]"/>
+            <field name="comment">View own timetable and assigned subjects</field>
+        </record>
+
+        <!-- Student -->
+        <record id="group_school_student" model="res.groups">
+            <field name="name">Student</field>
+            <field name="category_id" ref="ir_module_category_school"/>
+            <field name="implied_ids" eval="[(6, 0, [ref('base.group_user')])]"/>
+            <field name="comment">View own schedule and group only</field>
+        </record>
+
+    </data>
+</odoo>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

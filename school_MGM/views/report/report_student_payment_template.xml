@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_student_payment_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+
+                    <div class="page">
+
+                        <!-- ── HEADER ── -->
+                        <div class="text-center mb-4">
+                            <h2>Student Payment Receipt</h2>
+                            <h4>School Management System</h4>
+                            <hr/>
+                        </div>
+
+                        <!-- ── REFERENCE &amp; DATE ── -->
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Reference:</strong>
+                                <span t-field="doc.reference"/>
+                            </div>
+                            <div class="col-6 text-right">
+                                <strong>Payment Date:</strong>
+                                <span t-field="doc.payment_date"
+                                      t-options='{"widget": "datetime"}'/>
+                            </div>
+                        </div>
+
+                        <!-- ── STUDENT INFO ── -->
+                        <table class="table table-bordered mb-3">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th colspan="2">Student Information</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Student Name</strong></td>
+                                    <td><span t-field="doc.student_id"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Student Code</strong></td>
+                                    <td><span t-esc="doc.student_id.student_code or ''"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Major</strong></td>
+                                    <td><span t-field="doc.major_id"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Group</strong></td>
+                                    <td><span t-field="doc.group_id"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Academic Year</strong></td>
+                                    <td><span t-field="doc.academic_year_id"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Semester</strong></td>
+                                    <td><span t-field="doc.semester_id"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Program Year</strong></td>
+                                    <td><span t-field="doc.program_year_id"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- ── PAYMENT INFO ── -->
+                        <table class="table table-bordered mb-4">
+                            <thead class="table-success">
+                                <tr>
+                                    <th colspan="2">Payment Information</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Payment Status</strong></td>
+                                    <td><span t-field="doc.payment_amount"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Payment Method</strong></td>
+                                    <td><span t-field="doc.payment_method"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- ── FOOTER / SIGNATURE ── -->
+                        <div class="row mt-5">
+                            <div class="col-6 text-center">
+                                <p>____________________</p>
+                                <p>Student Signature</p>
+                            </div>
+                            <div class="col-6 text-center">
+                                <p>____________________</p>
+                                <p>Authorized By</p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

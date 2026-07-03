@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_school_teacher_tree">
+        <field name="name">school.teacher.tree</field>
+        <field name="model">school.teacher</field>
+        <field name="arch" type="xml">
+            <tree string="Teachers">
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="group_id" string="Group"  widget="many2many_tags"/>
+                <field name="subject_id" string="Subject" widget="many2many_tags"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_school_teacher_form">
+        <field name="name">school.teacher.form</field>
+        <field name="model">school.teacher</field>
+        <field name="arch" type="xml">
+            <form string="Teacher">
+                <sheet>
+                    <group>
+                        <field name="user_id" string="User"/>
+                        <field name="name"/>
+                        <field name="email"/>
+                        <field name="phone"/>
+                        <field name="subject_id" string="Subject"  widget="many2many_tags"/>
+                        <field name="group_id" string="Group"  widget="many2many_tags"/>
+                    </group>
+                </sheet>
+                 <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record model="ir.actions.server" id="action_add_user_teacher">
+        <field name="name">Add User</field>
+        <field name="model_id" ref="model_school_teacher"/>
+        <field name="binding_model_id" ref="model_school_teacher"/>
+        <field name="binding_type">action</field>
+        <field name="state">code</field>
+        <field name="code">
+            for record in records:
+                if record.email and not record.user_id:
+                    user = env['res.users'].create({
+                        'name': record.name,
+                        'login': record.email,
+                        'email': record.email,
+                        'password': '123',
+                        'groups_id': [(6, 0, [
+                            env.ref('school_MGM.group_school_teacher').id,
+                        ])],
+                    })
+                    record.write({
+                        'user_id': user.id,
+                    })
+        </field>
+    </record>
+    <record id="action_school_teacher" model="ir.actions.act_window">
+        <field name="name">Teachers</field>
+        <field name="res_model">school.teacher</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[
+            Command.clear(),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_school_teacher_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_school_teacher_form')})
+        ]"/>
+    </record>
+</odoo>

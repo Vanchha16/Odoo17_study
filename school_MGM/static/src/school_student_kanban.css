@@ -1,0 +1,27 @@
+.o_kanban_view .card {
+    border-radius: 12px;
+    transition: all .2s ease;
+}
+
+.o_kanban_view .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,.15) !important;
+}
+
+.o_kanban_view .card-header {
+    border-radius: 12px 12px 0 0 !important;
+}
+.o_subject_offering_card {
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.o_subject_offering_card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.o_subject_offering_card .card-header {
+    border-radius: 12px 12px 0 0 !important;
+    font-size: 14px;
+}

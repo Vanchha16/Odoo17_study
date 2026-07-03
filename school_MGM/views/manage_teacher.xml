@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_school_manage_teacher_tree">
+        <field name="name">school.manage.teacher.tree</field>
+        <field name="model">manage.teacher</field>
+        <field name="arch" type="xml">
+            <tree string="Manage Teachers">
+                <field name="teacher_id" string="Teacher" />
+                <field name="subject_id" string="Subject" />
+                <field name="group_id" string="Group" />
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_school_manage_teacher_form">
+        <field name="name">school.manage.teacher.form</field>
+        <field name="model">manage.teacher</field>
+        <field name="arch" type="xml">
+            <form string="Manage Teacher">
+                <sheet>
+                    <group>
+                        <field name="teacher_id" string="Teacher" />
+                        <field name="subject_id" string="Subject" />
+                        <field name="group_id" string="Group" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_school_manage_teacher">
+        <field name="name">Manage Teachers</field>
+        <field name="res_model">manage.teacher</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[
+            Command.clear(),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_school_manage_teacher_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_school_manage_teacher_form')})
+        ]"/>
+    </record>
+</odoo>

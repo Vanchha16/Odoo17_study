@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="0">
+        <record id="module_category_car" model="ir.module.category">
+            <field name="name">Car</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="group_rma_manager" model="res.groups">
+            <field name="name">Sale Manager</field>
+            <field name="category_id" ref="module_category_car"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_rma_admin" model="res.groups">
+            <field name="name">Sale Admin</field>
+            <field name="category_id" ref="module_category_car"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="admin_rma_rule" model="ir.rule">
+            <field name="name">Sale Admin: view own sale orders only</field>
+            <field name="model_id" ref="RMA_Car_MGM.model_rma_sale_order"/>
+            <field name="groups" eval="[Command.set([ref('group_rma_admin')])]"/>
+            <field name="domain_force">[('create_uid', '=', user.id)]</field>
+        </record>
+
+    </data>
+</odoo>

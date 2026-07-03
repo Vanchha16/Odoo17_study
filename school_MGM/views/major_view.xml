@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_school_major_tree">
+        <field name="name">school.major.tree</field>
+        <field name="model">school.major</field>
+        <field name="arch" type="xml">
+            <tree string="Majors">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="degree_level"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_school_major_form">
+        <field name="name">school.major.form</field>
+        <field name="model">school.major</field>
+        <field name="arch" type="xml">
+            <form string="Major">
+                <sheet>
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="degree_level"/>
+                        <field name="status"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_school_major">
+        <field name="name">Majors</field>
+        <field name="res_model">school.major</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[
+            Command.clear(),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_school_major_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_school_major_form')})
+        ]"/>
+    </record>
+</odoo>

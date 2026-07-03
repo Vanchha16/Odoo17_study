@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_license_plate_tree">
+        <field name="name">License Plate</field>
+        <field name="model">rma.car.test.plate</field>
+        <field name="arch" type="xml">
+            <tree string="License Plate">
+                <field name="test_id" string="Car Name"/>
+                <field name="license_plate" string="License Plate"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_license_plate_from">
+        <field name="name">License Plate</field>
+        <field name="model">rma.car.test.plate</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="License Plate">
+                        <field name="test_id" string="Car Name"/>
+                        <field name="license_plate" string="License Plate"/>
+                    </group>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_rma_license_plate">
+        <field name="name">License Plate</field>
+        <field name="res_model">rma.car.test.plate</field>
+        <field name="context"/>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[
+                    Command.clear(),
+                    (0, 0, {'view_mode': 'tree', 'view_id': ref('view_license_plate_tree')}),
+                    (0, 0, {'view_mode': 'form', 'view_id': ref('view_license_plate_from')})
+                ]"/>
+    </record>
+</odoo>

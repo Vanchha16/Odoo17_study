@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="rma_car_search">
+        <field name="name">rma_car_search</field>
+        <field name="model">rma.car</field>
+        <field name="arch" type="xml">
+            <search string="Vehicles">
+                <field name="name"
+                    filter_domain="['|', '|', '|',
+                        ('name',      'ilike', self),
+                        ('model',     'ilike', self),
+                        ('colorcode', 'ilike', self),
+                        ('engine',    'ilike', self),
+                        ('brand_id',  'ilike', self),
+                        ]"
+                    string="Search"/>
+            <field name="year" string="Year" filter_domain="[('year', '=', self)]"/>
+            <separator/>
+            <filter name="filter_2023" string="Year 2023" domain="[('year', '=', 2023)]"/>
+            <filter name="filter_2022" string="Year 2022" domain="[('year', '=', 2022)]"/>
+
+
+            <group expand="0" string="Group By">
+                <filter name="group_brand" string="Brand" context="{'group_by': 'brand_id'}"/>
+                <filter name="group_year"  string="Year"  context="{'group_by': 'year'}"/>
+            </group>
+            </search>
+        </field>
+    </record>
+    <record id="view_car_only_tree" model="ir.ui.view">
+        <field name="name">car_view_only_tree</field>
+        <field name="model">rma.car</field>
+        <field name="arch" type="xml">
+            <tree string="Vehicles" create="0" edit="0" delete="0">
+                <field name="name"/>
+                <field name="model"/>
+                <field name="qty"/>
+                <field name="car_availability"/>
+
+                <field name="colorcode"/>
+                <field name="year"/>
+                <field name="engine"/>
+                <field name="price"/>
+                <field name="commission_rate" />
+                <field name="brand_id" widget="many2one_avatar"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_car_only_form">
+        <field name="name">car_view_only_form</field>
+        <field name="model">rma.car</field>
+        <field name="arch" type="xml">
+            <form string="Vehicles" create="0" edit="0" delete="0">
+                <sheet>
+                    <group>
+                        <group string="Car Info">
+                            <field name="name" string="Car Name"/>
+                            <field name="qty" string="Quantity"/>
+                            <field name="car_availability"/>
+                            <field name="model"/>
+                            <field name="colorcode"/>
+                            <field name="year"/>
+                            <field name="engine"/>
+                            <field name="price"/>
+                            <field name="commission_rate"/>
+                        </group>
+                        <group string="Brands">
+                            <field name="brand_id" widget="many2one_avatar"/>
+                        </group>
+                         <notebook>
+                        <page string="Customer">
+
+                        </page>
+                        <page string="Test Drive">
+                            <group>
+                                <field name="license_plate_ids"/>
+                            </group>
+                        </page>
+
+                    </notebook>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+   <record id="action_rma_car_viewonly" model="ir.actions.act_window">
+        <field name="name">Views Vehicles</field>
+        <field name="search_view_id" ref="rma_car_search"/>
+        <field name="res_model">rma.car</field>
+        <field name="view_ids" eval="[
+                    Command.clear(),
+                    (0, 0, {'view_mode': 'tree', 'view_id': ref('view_car_only_tree')}),
+                    (0, 0, {'view_mode': 'form', 'view_id': ref('view_car_only_form')})
+                ]"/>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!-- ── Tree View ──────────────────────────────────────────────── -->
+    <record id="view_study_schedule_tree" model="ir.ui.view">
+        <field name="name">school.study.schedule.tree</field>
+        <field name="model">school.study.schedule</field>
+        <field name="arch" type="xml">
+            <tree string="Study Schedules">
+                <field name="name"/>
+                <field name="group_id"/>
+                <field name="major_id"/>
+                <field name="day_of_week"/>
+                <field name="study_session_id"/>
+                <field name="subject_offering_id"/>
+                <field name="teacher_id"/>
+                <field name="room_id"/>
+                <field name="semester_id"/>
+                <field name="session_count" string="Sessions"/>
+                <field name="state" widget="badge"
+                       decoration-muted="state == 'draft'"
+                       decoration-success="state == 'active'"
+                       decoration-danger="state == 'cancelled'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ── Form View ──────────────────────────────────────────────── -->
+    <record id="view_study_schedule_form" model="ir.ui.view">
+        <field name="name">school.study.schedule.form</field>
+        <field name="model">school.study.schedule</field>
+        <field name="arch" type="xml">
+            <form string="Study Schedule">
+
+                <header>
+                    <!-- Draft → Active -->
+                    <button name="action_generate_sessions"
+                            string="Generate Sessions"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state == 'active'"
+                            confirm="This will delete any previously generated sessions and regenerate them. Continue?"/>
+                    <!-- Active → Cancelled -->
+                    <button name="action_cancel"
+                            string="Cancel Schedule"
+                            type="object"
+                            invisible="state in ('draft', 'cancelled')"/>
+                    <!-- Cancelled → Draft -->
+                    <button name="action_reset_draft"
+                            string="Reset to Draft"
+                            type="object"
+                            invisible="state != 'cancelled'"/>
+
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,active,cancelled"/>
+                </header>
+
+                <sheet>
+
+                    <!-- Stat button: jump to generated timetable sessions -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_sessions"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-calendar-o"
+                                invisible="session_count == 0">
+                            <field name="session_count"
+                                   widget="statinfo"
+                                   string="Sessions"/>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Monday Morning – IT Year 1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Class Info">
+                            <field name="group_id"/>
+                            <field name="major_id" readonly="1"/>
+                            <field name="subject_offering_id"/>
+                            <field name="teacher_id"/>
+                        </group>
+                        <group string="Schedule">
+                            <field name="day_of_week"/>
+                            <field name="study_session_id"/>
+                            <field name="room_id"/>
+                        </group>
+                    </group>
+
+                    <group string="Academic Period">
+                        <group>
+                            <field name="academic_year_id" readonly="1"/>
+                            <field name="semester_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="program_year_id" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Generated Sessions" name="sessions">
+                            <field name="timetable_ids" readonly="1" mode="tree">
+                                <tree string="Sessions" decoration-danger="state == 'cancelled'"
+                                      decoration-success="state == 'confirmed'">
+                                    <field name="reference"/>
+                                    <field name="time_start" string="Date &amp; Start"/>
+                                    <field name="time_end"   string="End"/>
+                                    <field name="state" widget="badge"
+                                           decoration-info="state == 'draft'"
+                                           decoration-success="state == 'confirmed'"
+                                           decoration-danger="state == 'cancelled'"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+
+            </form>
+        </field>
+    </record>
+
+    <!-- ── Search View ────────────────────────────────────────────── -->
+    <record id="view_study_schedule_search" model="ir.ui.view">
+        <field name="name">school.study.schedule.search</field>
+        <field name="model">school.study.schedule</field>
+        <field name="arch" type="xml">
+            <search string="Search Study Schedules">
+                <field name="name"/>
+                <field name="group_id"/>
+                <field name="major_id"/>
+                <field name="teacher_id"/>
+                <field name="room_id"/>
+                <field name="subject_offering_id"/>
+                <field name="study_session_id"/>
+
+                <separator/>
+                <!-- Status filters -->
+                <filter string="Draft"     name="filter_draft"
+                        domain="[('state', '=', 'draft')]"/>
+                <filter string="Active"    name="filter_active"
+                        domain="[('state', '=', 'active')]"/>
+                <filter string="Cancelled" name="filter_cancelled"
+                        domain="[('state', '=', 'cancelled')]"/>
+
+                <separator/>
+                <!-- Day of week filters -->
+                <filter string="Monday"    name="filter_mon" domain="[('day_of_week', '=', '0')]"/>
+                <filter string="Tuesday"   name="filter_tue" domain="[('day_of_week', '=', '1')]"/>
+                <filter string="Wednesday" name="filter_wed" domain="[('day_of_week', '=', '2')]"/>
+                <filter string="Thursday"  name="filter_thu" domain="[('day_of_week', '=', '3')]"/>
+                <filter string="Friday"    name="filter_fri" domain="[('day_of_week', '=', '4')]"/>
+                <filter string="Saturday"  name="filter_sat" domain="[('day_of_week', '=', '5')]"/>
+
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Group"    name="by_group"    context="{'group_by': 'group_id'}"/>
+                    <filter string="Day"      name="by_day"      context="{'group_by': 'day_of_week'}"/>
+                    <filter string="Teacher"  name="by_teacher"  context="{'group_by': 'teacher_id'}"/>
+                    <filter string="Room"     name="by_room"     context="{'group_by': 'room_id'}"/>
+                    <filter string="Session"  name="by_session"  context="{'group_by': 'study_session_id'}"/>
+                    <filter string="Semester" name="by_semester" context="{'group_by': 'semester_id'}"/>
+                    <filter string="Status"   name="by_state"    context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ── Window Action ──────────────────────────────────────────── -->
+    <record id="action_study_schedule" model="ir.actions.act_window">
+        <field name="name">Study Schedules</field>
+        <field name="res_model">school.study.schedule</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_study_schedule_search"/>
+        <field name="context">{'search_default_by_group': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first study schedule
+            </p>
+            <p>
+                Define a recurring weekly slot — pick the group, day, session,
+                teacher and room, then click <b>Generate Sessions</b> to
+                automatically create one timetable entry per week until the
+                end of the semester.
+            </p>
+        </field>
+    </record>
+
+</odoo>

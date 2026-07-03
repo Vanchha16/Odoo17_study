@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_customer_tree">
+        <field name="name">customer_view_tree</field>
+        <field name="model">rma.customer</field>
+        <field name="arch" type="xml">
+            <tree string="Customers">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="address"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_customer_form">
+        <field name="name">customer_view_form</field>
+        <field name="model">rma.customer</field>
+        <field name="arch" type="xml">
+            <form string="Customers">
+                <sheet>
+                    <group>
+                        <group string="Customer Info">
+                            <field name="name" string="Customer Name"/>
+                            <field name="phone" string="Phone"/>
+                            <field name="email" string="Email"/>
+                            <field name="address" string="Address"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_customer">
+        <field name="name">action_customer</field>
+        <field name="res_model">rma.customer</field>
+        <field name="context"/>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="view_ids" eval="[
+                    Command.clear(),
+                    (0, 0, {'view_mode': 'tree', 'view_id': ref('view_customer_tree')}),
+                    (0, 0, {'view_mode': 'form', 'view_id': ref('view_customer_form')})
+                ]"/>
+    </record>
+</odoo>

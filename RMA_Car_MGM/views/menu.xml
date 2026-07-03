@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <menuitem id="menu_sale_car"
+              name="Vehicle Management"
+              web_icon="RMA_Car_MGM,static/description/icon.png">
+    </menuitem>
+    <menuitem id="menu_car_Configuration" name="Vehicle Configuration"
+              parent="menu_sale_car"
+              sequence="1">
+    </menuitem>
+    <menuitem id="menu_car_view"
+          name="View All Vehicle"
+          parent="menu_car_Configuration"
+          action="action_rma_car_viewonly"
+          sequence="1"
+          groups="RMA_Car_MGM.group_rma_manager"/>
+          
+    <menuitem id="menu_car_CRUD"
+              name="Add/Edit Vehicle"
+              parent="menu_car_Configuration"
+              action="action_rma_car"
+              sequence="2"
+              groups="RMA_Car_MGM.group_rma_admin"/>
+
+    <menuitem id="menu_brand"
+              name="Brand"
+              parent="menu_car_Configuration"
+              action="action_rma_brand"
+              sequence="3"
+              groups="RMA_Car_MGM.group_rma_admin"/>
+    <menuitem id="action_license_plate"
+              name="License Plate"
+              parent="menu_car_Configuration"
+              action="action_rma_license_plate"
+              sequence="4"/>
+    <menuitem id="menu_customer"
+              name="Customers"
+              parent="menu_sale_car">
+    </menuitem>
+    <menuitem id="menu_customer_view"
+              name="Customers"
+              parent="menu_customer"
+              action="action_customer">
+    </menuitem>
+    <menuitem id="menu_cus_register"
+              name="Customer Registration"
+              parent="menu_customer"
+              action="action_cus_register">
+    </menuitem>
+    <menuitem id="menu_cus_test_drive"
+              name="Customer Test Drive"
+              parent="menu_customer"
+              action="action_cus_test_drive">
+    </menuitem>
+    <menuitem id="menu_sale"
+              name="Sales"
+              parent="menu_sale_car">
+    </menuitem>
+    <menuitem id="menu_sale_view"
+              name="Sales"
+              parent="menu_sale"
+              action="action_salesperson">
+    </menuitem>
+    <menuitem id="menu_sale_order"
+              name="Sale Order"
+              parent="menu_sale"
+              action="action_sale_order">
+    </menuitem>
+    <menuitem id="menu_sale_dashboard"
+              name="Dashboard"
+              parent="menu_sale"
+              action="action_sale_dashboard"
+              sequence="10">
+    </menuitem>
+</odoo>

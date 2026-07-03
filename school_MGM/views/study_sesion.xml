@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!-- Tree View -->
+    <record id="view_study_session_tree" model="ir.ui.view">
+        <field name="name">school.study.session.tree</field>
+        <field name="model">school.study.session</field>
+        <field name="arch" type="xml">
+            <tree string="Study Sessions" decoration-muted="not label">
+                <field name="label"/>
+                <field name="session"/>
+                <field name="period"/>
+                <field name="start_time" widget="float_time"/>
+                <field name="end_time" widget="float_time"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_study_session_form" model="ir.ui.view">
+        <field name="name">school.study.session.form</field>
+        <field name="model">school.study.session</field>
+        <field name="arch" type="xml">
+            <form string="Study Session">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="label"/>
+                        <h1>
+                            <field name="label" placeholder="e.g. Monday Morning Slot"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="session"/>
+                            <field name="period"/>
+                        </group>
+                        <group>
+                            <field name="start_time" widget="float_time"/>
+                            <field name="end_time" widget="float_time"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_study_session_search" model="ir.ui.view">
+        <field name="name">school.study.session.search</field>
+        <field name="model">school.study.session</field>
+        <field name="arch" type="xml">
+            <search string="Search Study Sessions">
+                <field name="label"/>
+                <field name="session"/>
+                <field name="period"/>
+                <filter string="Morning" name="filter_morning" domain="[('period','=','morning')]"/>
+                <filter string="Afternoon" name="filter_afternoon" domain="[('period','=','afternoon')]"/>
+                <filter string="Evening" name="filter_evening" domain="[('period','=','evening')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Session" name="group_session" context="{'group_by':'session'}"/>
+                    <filter string="Period" name="group_period" context="{'group_by':'period'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_study_session" model="ir.actions.act_window">
+        <field name="name">Study Sessions</field>
+        <field name="res_model">school.study.session</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_study_session_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first study session
+            </p>
+        </field>
+    </record>
+
+</odoo>
