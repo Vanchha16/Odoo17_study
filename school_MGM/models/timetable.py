@@ -3,6 +3,7 @@ from odoo.exceptions import ValidationError
 from datetime import timedelta
 import pytz
 
+
 class SchoolTimetable(models.Model):
     _name = 'school.timetable'
     _inherit = ['mail.thread']
@@ -20,9 +21,9 @@ class SchoolTimetable(models.Model):
     )
 
     time_start = fields.Datetime(string='Start Time', required=True, tracking=True)
-    time_end   = fields.Datetime(string='End Time',   required=True, tracking=True)
+    time_end = fields.Datetime(string='End Time', required=True, tracking=True)
 
-    period = fields.Selection(related='group_id.period', store=True, readonly=True)
+    period = fields.Many2one('school.study.session', related='group_id.period_id', store=False, readonly=True)
     group_id = fields.Many2one(
         'school.group',
         string='Group',
@@ -38,7 +39,6 @@ class SchoolTimetable(models.Model):
         domain="[('teacher_ids', 'in', [teacher_id])]",
     )
 
-
     room_id = fields.Many2one(
         'school.room',
         string='Room',
@@ -52,7 +52,7 @@ class SchoolTimetable(models.Model):
     notes = fields.Text(string='Notes', tracking=True)
 
     state = fields.Selection([
-        ('draft',     'Draft'),
+        ('draft', 'Draft'),
         ('confirmed', 'Confirmed'),
         ('cancelled', 'Cancelled'),
     ], string='Status', default='draft', tracking=True)
@@ -118,6 +118,7 @@ class SchoolTimetable(models.Model):
     def _onchange_teacher_id(self):
         self.group_id = False
         self.subject_id = False
+
     def action_confirm(self):
         for rec in self:
             rec.state = 'confirmed'

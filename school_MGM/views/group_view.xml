@@ -7,7 +7,7 @@
             <tree string="Groups">
 <!--                <field name="name"/>-->
                 <field name="display_group_name"/>
-                <field name="period" string="Period" />
+                <field name="period_MAE" string="Period" />
                 <field name="academic_year_id"/>
                 <field name="semester_id"/>
                 <field name="program_year_id"/>
@@ -24,7 +24,7 @@
             <kanban>
 <!--                <field name="name"/>-->
                 <field name="display_group_name"/>
-                <field name="period"/>
+                <field name="period_MAE"/>
                 <field name="student_count"/>
                 <field name="teacher_count"/>
                 <templates>
@@ -76,7 +76,7 @@
                             <field name="semester_id"/>
                             <field name="program_year_id"/>
                             <field name="major_id"/>
-                            <field name="period"/>
+                            <field name="period_MAE"/>
 
                         </group>
                     </group>

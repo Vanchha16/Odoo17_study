@@ -42,20 +42,7 @@
         <field name="binding_type">action</field>
         <field name="state">code</field>
         <field name="code">
-            for record in records:
-                if record.email and not record.user_id:
-                    user = env['res.users'].create({
-                        'name': record.name,
-                        'login': record.email,
-                        'email': record.email,
-                        'password': '123',
-                        'groups_id': [(6, 0, [
-                            env.ref('school_MGM.group_school_teacher').id,
-                        ])],
-                    })
-                    record.write({
-                        'user_id': user.id,
-                    })
+           action = model.action_craete_user
         </field>
     </record>
     <record id="action_school_teacher" model="ir.actions.act_window">

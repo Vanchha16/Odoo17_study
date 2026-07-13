@@ -1,5 +1,9 @@
+from multiprocessing.reduction import duplicate
+from re import search
+
 from odoo import models, fields, api, _
 from  odoo.exceptions import ValidationError
+from odoo.exceptions import UserError
 
 
 class Student(models.Model):
@@ -16,7 +20,7 @@ class Student(models.Model):
     phone = fields.Char(string='Phone', tracking=True)
     status = fields.Selection([('draft', 'Draft'), ('enrolled', 'Enrolled'), ('cancelled', 'Cancelled')],
                               string='Status', default='draft', tracking=True)
-    group_id = fields.Many2one('school.group', string='Group', tracking=True, required=True)
+    group_id = fields.Many2one('school.group', string='Group', tracking=True, required=True , domain="[('major_id', 'in', [major_id])]")
     major_id = fields.Many2one('school.major', string='Major', tracking=True, required=True)
     name_major = fields.Char(string='Major Name', related='major_id.name', store=True, tracking=True)
     name_major_code = fields.Char(string='Major Code', related='major_id.code', store=True, tracking=True)
@@ -46,7 +50,12 @@ class Student(models.Model):
                                       string='Program Year',
                                       tracking=True)
 
+    student_count = fields.Integer(string='Student Count', compute='_compute_student_count')
 
+    @api.depends('group_id')
+    def _compute_student_count(self):
+        for rec in self:
+            rec.student_count = len(rec.group_id.student_ids)
 
     @api.model
     def create(self, vals):
@@ -128,3 +137,16 @@ class Student(models.Model):
             'view_mode': 'tree,form',
             'domain': [('student_id', 'in', self.ids)],
         }
+
+    @api.constrains('phone')
+    def _check_phone(self):
+        for rec in self:
+            if rec.phone and self.search_count([('phone', '=', rec.phone), ('id', '!=', rec.id)]) > 0:
+                raise ValidationError(_("Phone number already exists."))\
+
+    @api.constrains('email')
+    def _check_email(self):
+        for rec in self:
+            duplicate = self.search([('email', '=', rec.email), ('id', '!=', rec.id)], limit=1)
+            if duplicate:
+                raise ValidationError(_("Email already exists use by %s.") % duplicate.name)

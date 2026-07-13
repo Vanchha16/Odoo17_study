@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="action_report_purchase_order" model="ir.actions.report">
+        <field name="name">Purchase Order</field>
+        <field name="model">mini.purchase.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">mini_procurement.report_purchase_order_template</field>
+        <field name="report_file">mini_procurement.report_purchase_order_template</field>
+        <field name="binding_model_id" ref="model_mini_purchase_order"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_purchase_order_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <!-- Header -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h2>Purchase Order</h2>
+                                <p><strong>PO Number:</strong> <span t-esc="o.name"/></p>
+                                <p><strong>Order Date:</strong> <span t-esc="o.order_date"/></p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p>
+                                    <strong>Status:</strong>
+                                    <span t-esc="dict(o._fields['state'].selection).get(o.state)"/>
+                                </p>
+                                <t t-if="o.purchase_request_id">
+                                    <p>
+                                        <strong>Source Request:</strong>
+                                        <span t-esc="o.purchase_request_id.name"/>
+                                    </p>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- Vendor -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h4>Vendor</h4>
+                                <p t-esc="o.vendor_id.name"/>
+                                <t t-if="o.vendor_id.street">
+                                    <p t-esc="o.vendor_id.street"/>
+                                </t>
+                                <t t-if="o.vendor_id.city or o.vendor_id.country_id">
+                                    <p>
+                                        <span t-esc="o.vendor_id.city"/>
+                                        <t t-if="o.vendor_id.city and o.vendor_id.country_id">, </t>
+                                        <span t-esc="o.vendor_id.country_id.name"/>
+                                    </p>
+                                </t>
+                                <t t-if="o.vendor_id.email">
+                                    <p><strong>Email:</strong> <span t-esc="o.vendor_id.email"/></p>
+                                </t>
+                                <t t-if="o.vendor_id.phone">
+                                    <p><strong>Phone:</strong> <span t-esc="o.vendor_id.phone"/></p>
+                                </t>
+                            </div>
+                            <div class="col-6">
+                                <h4>Order Info</h4>
+                                <p><strong>Company:</strong> <span t-esc="o.company_id.name"/></p>
+                            </div>
+                        </div>
+
+                        <!-- Order Lines -->
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Product</th>
+                                    <th class="text-end">Quantity</th>
+                                    <th class="text-end">Unit Price</th>
+                                    <th class="text-end">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.order_line_ids" t-as="line">
+                                    <tr>
+                                        <td t-esc="line_index + 1"/>
+                                        <td t-esc="line.product_id.display_name"/>
+                                        <td class="text-end" t-esc="line.qty"/>
+                                        <td class="text-end"
+                                            t-esc="line.price_unit"
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        <td class="text-end"
+                                            t-esc="line.subtotal"
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <!-- Total -->
+                        <div class="row mt-4">
+                            <div class="col-6 offset-6">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Total Amount</strong></td>
+                                        <td class="text-end">
+                                            <strong>
+                                                <span t-esc="o.amount_total"
+                                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Notes -->
+                        <t t-if="o.notes">
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <h4>Notes</h4>
+                                    <p t-esc="o.notes"/>
+                                </div>
+                            </div>
+                        </t>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

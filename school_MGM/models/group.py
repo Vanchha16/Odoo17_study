@@ -1,4 +1,6 @@
-from odoo import models, fields, api
+from odoo import models, fields, api,_
+from odoo.exceptions import ValidationError
+
 
 class Group(models.Model):
     _name = 'school.group'
@@ -12,12 +14,8 @@ class Group(models.Model):
         string='Group Label',
         compute='_compute_display_group_name',
         store=True, tracking=True)
-    period = fields.Selection([
-        ('M', 'Morning'),
-        ('A', 'Afternoon'),
-        ('E', 'Evening'),
-         ], string='Period', required=True, tracking=True)
-
+    period_id = fields.Many2one('school.study.session', string='Period', tracking=True)
+    period_MAE = fields.Selection(related='period_id.period', string='Period', readonly=False , store=True)
     academic_year_id = fields.Many2one('school.academic.year', string='Academic Year', tracking=True)
     semester_id = fields.Many2one('school.semester', string='Semester', tracking=True)
     program_year_id = fields.Many2one('school.program.year', string='Program Year', tracking=True)
@@ -27,8 +25,9 @@ class Group(models.Model):
     teacher_ids = fields.Many2many('school.teacher', string='Teacher', tracking=True, required=True)
     student_count = fields.Integer(string='Student Count', compute='_compute_student_count')
     teacher_count = fields.Integer(string='Teachers', compute='_compute_teacher_count')
+
     _sql_constraints = [
-        ('name_unique', 'UNIQUE(name)', 'A group with this name already exists.')
+        ('group_unique', 'UNIQUE(display_group_name)', 'A group with this name already exists.')
     ]
 
     @api.depends('label_id', 'label_id.name', 'name')
@@ -47,3 +46,5 @@ class Group(models.Model):
     def _compute_teacher_count(self):
         for rec in self:
             rec.teacher_count = len(rec.teacher_ids)
+
+

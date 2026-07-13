@@ -10,19 +10,31 @@ class StudySchedule(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'name'
 
-    name = fields.Char(string='Schedule Name', required=True, tracking=True)
+    name = fields.Char(string='Schedule Name', tracking=True)
 
     group_id = fields.Many2one('school.group', string='Group', required=True, tracking=True)
     major_id = fields.Many2one(
         'school.major', related='group_id.major_id',
         string='Major', store=True, readonly=True
     )
-    room_id = fields.Many2one('school.room', string='Room', required=True, tracking=True)
-    teacher_id = fields.Many2one('school.teacher', string='Teacher', required=True, tracking=True)
+    group_period = fields.Selection(
+        related='group_id.period_MAE',
+        string='Group Period',
+        readonly=True,
+        store=False,
+    )
     subject_offering_id = fields.Many2one(
         'school.subject.offering', string='Subject Offering',
         required=True, tracking=True
     )
+    subject_id = fields.Many2one(
+        'school.subject',
+        related='subject_offering_id.subject_id',
+        string='Subject', store=True, readonly=True
+    )
+    room_id = fields.Many2one('school.room', string='Room', required=True, tracking=True)
+    teacher_id = fields.Many2one('school.teacher', string='Teacher', required=True, tracking=True , domain="[('subject_id', 'in', [subject_id])]")
+
     study_session_id = fields.Many2one(
         'school.study.session', string='Study Session',
         required=True, tracking=True
@@ -64,6 +76,9 @@ class StudySchedule(models.Model):
     )
     session_count = fields.Integer(
         compute='_compute_session_count', string='Sessions Generated'
+    )
+    display_date = fields.Datetime(
+        string="Display Date"
     )
 
     @api.depends('timetable_ids')
@@ -140,7 +155,7 @@ class StudySchedule(models.Model):
                     'study_schedule_id': rec.id,
                     'group_id':   rec.group_id.id,
                     'teacher_id': rec.teacher_id.id,
-                    'subject_id': rec.subject_offering_id.subject_id.id,
+                    'subject_id': rec.subject_id.id,
                     'room_id':    rec.room_id.id,
                     'time_start': self._to_utc(current, session.start_time),
                     'time_end':   self._to_utc(current, session.end_time),

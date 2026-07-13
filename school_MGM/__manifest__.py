@@ -7,6 +7,7 @@
         'base',
         'mail',
         'account',
+        'purchase',
         ],
     'data': [
         'data/sequence.xml',

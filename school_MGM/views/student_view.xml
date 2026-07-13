@@ -141,9 +141,18 @@
                             type="object"
                             invisible="status != 'enrolled'"/>
                     <field name="status" widget="statusbar"
-                           statusbar_visible="draft,enrolled,cancelled"/>
+                           statusbar_visible="draft,enrolled,cancelled" options="{'clickable': True}"/>
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+
+                        <button name="action_generate_payment" type="object"
+                            string="Generate Payment" class="btn-primary border-1"
+                            invisible="status != 'enrolled'"
+                            icon="fa-print"
+                        />
+                    </div>
+
                     <group string="Student Code">
                         <h1>
                              <field name="student_code" string="Student Code" readonly="1"/>
@@ -177,7 +186,7 @@
                     <group string="Academic Information">
                         <group>
                             <field name="major_id" string="Major" />
-                            <field name="group_id" string="Group"/>
+                            <field name="group_id" string="Group" />
                         </group>
                         <group>
                             <field name="academic_year_id" string="Academic Year"/>

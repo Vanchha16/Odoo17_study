@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mini_purchase_request_user,mini.purchase.request.user,model_mini_purchase_request,mini_procurement.group_procurement_user,1,1,1,0
+access_mini_purchase_request_manager,mini.purchase.request.manager,model_mini_purchase_request,mini_procurement.group_procurement_manager,1,1,1,1
+access_mini_purchase_order_user,mini.purchase.order.user,model_mini_purchase_order,mini_procurement.group_procurement_user,1,0,0,0
+access_mini_purchase_order_manager,mini.purchase.order.manager,model_mini_purchase_order,mini_procurement.group_procurement_manager,1,1,1,1
+access_mini_purchase_order_line_user,mini.purchase.order.line.user,model_mini_purchase_order_line,mini_procurement.group_procurement_user,1,0,0,0
+access_mini_purchase_order_line_manager,mini.purchase.order.line.manager,model_mini_purchase_order_line,mini_procurement.group_procurement_manager,1,1,1,1

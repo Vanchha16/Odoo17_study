@@ -13,3 +13,18 @@ class Teacher(models.Model):
 
     user_id = fields.Many2one('res.users', string='User', tracking=True)
 
+    def action_craete_user(self):
+        for record in records:
+            if record.email and not record.user_id:
+                user = env['res.users'].create({
+                    'name': record.name,
+                    'login': record.email,
+                    'email': record.email,
+                    'password': '123',
+                    'groups_id': [(6, 0, [
+                        env.ref('school_MGM.group_school_teacher').id,
+                    ])],
+                })
+                record.write({
+                    'user_id': user.id,
+                })

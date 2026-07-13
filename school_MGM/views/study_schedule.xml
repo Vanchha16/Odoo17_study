@@ -7,12 +7,11 @@
         <field name="model">school.study.schedule</field>
         <field name="arch" type="xml">
             <tree string="Study Schedules">
-                <field name="name"/>
                 <field name="group_id"/>
                 <field name="major_id"/>
                 <field name="day_of_week"/>
                 <field name="study_session_id"/>
-                <field name="subject_offering_id"/>
+                <field name="subject_id"/>
                 <field name="teacher_id"/>
                 <field name="room_id"/>
                 <field name="semester_id"/>
@@ -71,9 +70,9 @@
                     </div>
 
                     <div class="oe_title">
-                        <label for="name"/>
+                        <label for="name" invisible="True"/>
                         <h1>
-                            <field name="name" placeholder="e.g. Monday Morning – IT Year 1"/>
+                            <field name="name" invisible="True" placeholder="e.g. Monday Morning – IT Year 1"/>
                         </h1>
                     </div>
 
@@ -81,12 +80,15 @@
                         <group string="Class Info">
                             <field name="group_id"/>
                             <field name="major_id" readonly="1"/>
-                            <field name="subject_offering_id"/>
+                            <field name="subject_offering_id"
+                                   domain="[('major_id', '=', major_id), ('semester_id', '=', semester_id), ('program_year_id', '=', program_year_id)]"/>
+                            <field name="subject_id" readonly="1"/>
                             <field name="teacher_id"/>
                         </group>
                         <group string="Schedule">
+                            <field name="group_period" invisible="1"/>
                             <field name="day_of_week"/>
-                            <field name="study_session_id"/>
+                            <field name="study_session_id" domain="[('period', '=', group_period)]"/>
                             <field name="room_id"/>
                         </group>
                     </group>
@@ -136,12 +138,12 @@
         <field name="model">school.study.schedule</field>
         <field name="arch" type="xml">
             <search string="Search Study Schedules">
-                <field name="name"/>
+                <field name="name" invisible="True"/>
                 <field name="group_id"/>
                 <field name="major_id"/>
                 <field name="teacher_id"/>
                 <field name="room_id"/>
-                <field name="subject_offering_id"/>
+                <field name="subject_id"/>
                 <field name="study_session_id"/>
 
                 <separator/>
@@ -175,12 +177,35 @@
             </search>
         </field>
     </record>
+    <!-- ── Redesigned Calendar View ───────────────────────────────── -->
+    <record id="view_study_schedule_calendar" model="ir.ui.view">
+        <field name="name">school.study.schedule.calendar</field>
+        <field name="model">school.study.schedule</field>
+        <field name="arch" type="xml">
+            <calendar string="Study Schedule"
+                      date_start="display_date"
+                      color="group_id"
+                      mode="week"
+                      quick_create="false"
+                      event_open_popup="true"
+                      hide_time="true">
+
+                <field name="group_id"/>
+
+                <!-- Secondary context details -->
+                <field name="teacher_id" filters="1"/>
+                <field name="room_id" filters="1"/>
+                <field name="study_session_id"/>
+                <field name="state" widget="badge"/>
+            </calendar>
+        </field>
+    </record>
 
     <!-- ── Window Action ──────────────────────────────────────────── -->
     <record id="action_study_schedule" model="ir.actions.act_window">
         <field name="name">Study Schedules</field>
         <field name="res_model">school.study.schedule</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,calendar</field>
         <field name="search_view_id" ref="view_study_schedule_search"/>
         <field name="context">{'search_default_by_group': 1}</field>
         <field name="help" type="html">
